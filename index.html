@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лагерный Отдых — Бортовой Журнал</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+DW+Pica:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   ЛАГЕРНЫЙ ОТДЫХ — БОРТОВОЙ ЖУРНАЛ
+   Эстетика: походный дневник, вклеенные
+   пергаменты, чернила, медь, сургуч.
+═════════════════════════════════════════ */
+
+:root {
+  /* ночь и угли */
+  --night:        #0a0908;
+  --night-2:      #12100d;
+  --soot:         #1a1611;
+  --char:         #221c14;
+
+  /* пергамент — три оттенка вклеек */
+  --vellum:       #e8dcc0;
+  --vellum-warm:  #ddc99e;
+  --vellum-cool:  #d6c8a8;
+  --vellum-edge:  #b8a37a;
+  --vellum-stain: rgba(120, 80, 30, 0.08);
+
+  /* чернила */
+  --ink:          #2a1f14;
+  --ink-soft:     #4a3a26;
+  --ink-fade:     #6b5a3e;
+  --ink-ghost:    #8a7858;
+
+  /* акценты — медь, сургуч, сусальное золото */
+  --copper:       #a85a28;
+  --copper-deep:  #803c14;
+  --copper-glow:  #d8804a;
+  --wax:          #6e1a14;
+  --wax-deep:     #4a0c0a;
+  --wax-shine:    #a23a30;
+  --leaf:         #b8862c;
+  --leaf-pale:    #e0b048;
+  --leaf-deep:    #6e4c10;
+
+  /* угольки и луна */
+  --ember:        #e8620a;
+  --ember-soft:   rgba(232, 98, 10, 0.5);
+  --moon:         #c8c4b8;
+
+  /* редкости (приглушены под палитру) */
+  --r-uncommon:   #5c8a3a;
+  --r-rare:       #2a5c8a;
+  --r-legendary:  #a85a28;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--night);
+  color: var(--ink);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── ночной фон с угольками ─────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle 1px at 12% 22%, rgba(232,98,10,0.6), transparent 2px),
+    radial-gradient(circle 1px at 78% 18%, rgba(232,98,10,0.4), transparent 2px),
+    radial-gradient(circle 1px at 34% 78%, rgba(232,98,10,0.5), transparent 2px),
+    radial-gradient(circle 1px at 88% 65%, rgba(232,98,10,0.3), transparent 2px),
+    radial-gradient(circle 1px at 22% 55%, rgba(232,98,10,0.4), transparent 2px),
+    radial-gradient(circle 1px at 62% 88%, rgba(232,98,10,0.5), transparent 2px),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(232,98,10,0.04), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(168,90,40,0.03), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+  animation: emberFlicker 8s ease-in-out infinite;
+}
+
+@keyframes emberFlicker {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.78; }
+}
+
+/* шум на пергаменте — повторяемая svg-текстура */
+.paper-noise {
+  position: relative;
+}
+.paper-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.2  0 0 0 0 0.1  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 1;
+}
+.paper-noise > * { position: relative; z-index: 2; }
+
+/* ════════════════════════════════════════
+   НАВИГАЦИЯ — кожаный корешок журнала
+═════════════════════════════════════════ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background:
+    linear-gradient(180deg, #1a1410 0%, #0f0c08 100%);
+  border-bottom: 1px solid rgba(168, 90, 40, 0.3);
+  box-shadow:
+    0 1px 0 rgba(216, 128, 74, 0.08) inset,
+    0 4px 20px rgba(0, 0, 0, 0.6);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 36px;
+  font-family: 'Special Elite', 'Courier New', monospace;
+}
+
+.nav-seal {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--wax-shine), var(--wax) 40%, var(--wax-deep) 100%);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.4),
+    0 0 8px rgba(110, 26, 20, 0.6),
+    inset -2px -2px 4px rgba(0,0,0,0.4),
+    inset 2px 2px 3px rgba(255, 100, 80, 0.2);
+  margin-right: 18px;
+  position: relative;
+  flex-shrink: 0;
+}
+.nav-seal::after {
+  content: '✦';
+  position: absolute;
+  inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(20, 0, 0, 0.5);
+  font-size: 11px;
+  text-shadow: 0 1px 0 rgba(255,150,120,0.2);
+}
+
+.nav-title {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--vellum-warm);
+  letter-spacing: 0.04em;
+  margin-right: 22px;
+  padding-right: 22px;
+  border-right: 1px dashed rgba(168, 90, 40, 0.3);
+}
+
+.nav-meta { display: flex; margin-left: auto; gap: 0; }
+
+.nm {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-ghost);
+  padding: 0 14px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  border-left: 1px dashed rgba(120, 100, 70, 0.2);
+}
+.nm.hot {
+  color: var(--copper-glow);
+  background: linear-gradient(180deg, transparent, rgba(168,90,40,0.08));
+}
+
+/* ════════════════════════════════════════
+   ОБЩАЯ СТРУКТУРА — СТРАНИЦА ЖУРНАЛА
+═════════════════════════════════════════ */
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 60px 28px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── вклеенный пергамент ─────────────── */
+.parchment {
+  position: relative;
+  background:
+    linear-gradient(135deg, var(--vellum) 0%, var(--vellum-warm) 100%);
+  color: var(--ink);
+  padding: 56px 64px;
+  margin: 32px 0;
+  box-shadow:
+    /* собственная тень */
+    0 24px 50px -12px rgba(0, 0, 0, 0.7),
+    0 8px 16px -4px rgba(0, 0, 0, 0.4),
+    /* сгиб слева */
+    inset 18px 0 30px -18px rgba(120, 80, 30, 0.35),
+    /* сгиб справа */
+    inset -18px 0 30px -18px rgba(120, 80, 30, 0.35),
+    /* верх затемнён */
+    inset 0 8px 20px -8px rgba(120, 80, 30, 0.2),
+    inset 0 -8px 20px -8px rgba(120, 80, 30, 0.2);
+  /* рваные края снизу */
+  --teeth: polygon(
+    0 0, 100% 0, 100% calc(100% - 6px),
+    98% 100%, 95% calc(100% - 4px), 92% 100%, 89% calc(100% - 5px),
+    86% 99%, 83% calc(100% - 3px), 80% 100%, 77% calc(100% - 6px),
+    74% 99%, 71% 100%, 68% calc(100% - 4px), 65% 100%,
+    62% calc(100% - 3px), 59% 100%, 56% calc(100% - 5px),
+    53% 99%, 50% 100%, 47% calc(100% - 4px), 44% 100%,
+    41% calc(100% - 6px), 38% 99%, 35% 100%, 32% calc(100% - 3px),
+    29% 100%, 26% calc(100% - 5px), 23% 99%, 20% 100%,
+    17% calc(100% - 4px), 14% 100%, 11% calc(100% - 6px),
+    8% 99%, 5% 100%, 2% calc(100% - 3px), 0 100%
+  );
+}
+
+/* пергамент со штампами по углам */
+.parchment::before,
+.parchment::after {
+  content: '';
+  position: absolute;
+  width: 28px; height: 28px;
+  background: radial-gradient(circle, var(--vellum-stain) 0%, transparent 70%);
+  pointer-events: none;
+}
+.parchment::before { top: 10px; left: 14px; }
+.parchment::after  { bottom: 14px; right: 18px; }
+
+/* лёгкий поворот вклеек для живости */
+.parchment.tilt-l { transform: rotate(-0.3deg); }
+.parchment.tilt-r { transform: rotate(0.3deg); }
+
+/* ── чернильное пятно (декор) ────────── */
+.inkblot {
+  position: absolute;
+  width: 80px; height: 80px;
+  pointer-events: none;
+  opacity: 0.18;
+  z-index: 3;
+}
+.inkblot svg { width: 100%; height: 100%; }
+
+/* ════════════════════════════════════════
+   ШАПКА ЖУРНАЛА
+═════════════════════════════════════════ */
+.titlepage {
+  padding: 80px 64px 64px;
+  position: relative;
+  background:
+    linear-gradient(135deg, var(--vellum) 0%, var(--vellum-warm) 60%, var(--vellum-cool) 100%);
+}
+
+.titlepage-mark {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--copper-deep);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.titlepage-mark::before,
+.titlepage-mark::after {
+  content: '';
+  flex: 1; max-width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--copper-deep), transparent);
+}
+
+h1.tome {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 78px;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin-bottom: 6px;
+  text-shadow: 0 1px 0 rgba(255, 240, 200, 0.4);
+  position: relative;
+}
+
+h1.tome .accent {
+  display: block;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--copper);
+  letter-spacing: 0.5em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+h1.tome .latin {
+  display: block;
+  font-family: 'IM Fell English', 'EB Garamond', serif;
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  margin-top: 18px;
+  text-shadow: none;
+}
+
+.tome-rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 28px 0;
+}
+.tome-rule .line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+}
+.tome-rule .glyph {
+  font-family: 'IM Fell English', serif;
+  color: var(--copper);
+  font-size: 18px;
+}
+
+.tome-lead {
+  font-size: 18px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+  max-width: 640px;
+  font-style: italic;
+}
+.tome-lead strong {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* двухколоночная шапка */
+.titlepage-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 56px;
+  align-items: start;
+  margin-top: 40px;
+}
+
+/* ── карточка-этикетка (правая часть шапки) */
+.label-card {
+  background:
+    linear-gradient(135deg, var(--vellum-cool) 0%, var(--vellum-warm) 100%);
+  border: 1px solid var(--vellum-edge);
+  padding: 0;
+  position: relative;
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,250,230,0.4);
+  transform: rotate(0.4deg);
+}
+.label-card::before {
+  /* отверстие верёвки */
+  content: '';
+  position: absolute;
+  top: -8px; left: 50%;
+  width: 14px; height: 14px;
+  background: var(--night-2);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    inset 0 2px 3px rgba(0,0,0,0.6),
+    0 0 0 1px var(--vellum-edge);
+}
+.label-card::after {
+  /* верёвочка */
+  content: '';
+  position: absolute;
+  top: -32px; left: 50%;
+  width: 2px; height: 30px;
+  background: linear-gradient(180deg, var(--leaf-deep), var(--copper-deep));
+  transform: translateX(-50%) rotate(-3deg);
+  transform-origin: bottom;
+  border-radius: 2px;
+}
+
+.label-head {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(120, 70, 20, 0.08) 0px,
+      rgba(120, 70, 20, 0.08) 4px,
+      transparent 4px,
+      transparent 8px
+    ),
+    var(--vellum-warm);
+  padding: 18px 22px;
+  border-bottom: 1px dashed var(--vellum-edge);
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--copper-deep);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.label-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.label-cell {
+  padding: 14px 18px;
+  border-bottom: 1px dashed rgba(184, 163, 122, 0.5);
+  border-right: 1px dashed rgba(184, 163, 122, 0.5);
+}
+.label-cell:nth-child(2n)     { border-right: none; }
+.label-cell:nth-last-child(-n+2) { border-bottom: none; }
+
+.lk {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--ink-fade);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.lv {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  font-style: italic;
+}
+.lv.copper { color: var(--copper-deep); }
+.lv.leaf   { color: var(--leaf-deep); }
+.lv.green  { color: var(--r-uncommon); }
+
+.label-foot {
+  padding: 16px 22px;
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--ink-fade);
+  line-height: 1.65;
+  border-top: 1px dashed var(--vellum-edge);
+  background: rgba(120, 70, 20, 0.04);
+}
+
+/* типы отдыха — два ярлыка */
+.rest-stamps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 36px;
+}
+
+.stamp {
+  position: relative;
+  padding: 22px 26px;
+  background: var(--vellum-cool);
+  border: 2px solid var(--ink-soft);
+  cursor: default;
+  transition: transform 0.2s;
+}
+.stamp:hover { transform: translateY(-2px); }
+
+.stamp.short { border-color: var(--ink-soft); transform: rotate(-0.5deg); }
+.stamp.long  { border-color: var(--copper-deep); transform: rotate(0.6deg); }
+.stamp.short:hover { transform: rotate(-0.5deg) translateY(-2px); }
+.stamp.long:hover  { transform: rotate(0.6deg) translateY(-2px); }
+
+/* «погашенный» штамп — диагональные линии */
+.stamp::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed currentColor;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.stamp .kind {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  margin-bottom: 6px;
+}
+.stamp.long .kind { color: var(--copper-deep); }
+
+.stamp .name {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.stamp .cost {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  color: var(--ink-fade);
+  letter-spacing: 0.04em;
+}
+.stamp .cost b {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--copper-deep);
+}
+
+/* ════════════════════════════════════════
+   ЗАГОЛОВКИ СЕКЦИЙ — РИМСКИЙ НОМЕРОК
+═════════════════════════════════════════ */
+.sec-mark {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.sec-roman {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--copper-glow), var(--copper) 50%, var(--copper-deep) 100%);
+  color: #fff5dc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 400;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 0 2px var(--vellum-warm),
+    0 0 0 3px var(--copper-deep),
+    inset -2px -2px 4px rgba(0,0,0,0.3),
+    inset 2px 2px 3px rgba(255,200,150,0.3),
+    0 4px 8px rgba(0,0,0,0.3);
+  transform: rotate(-4deg);
+}
+
+.sec-lbl {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: var(--copper-deep);
+  text-transform: uppercase;
+}
+.sec-rule-h {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--copper), transparent);
+  max-width: 200px;
+}
+
+h2.chapter {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: 0.005em;
+}
+
+h2.chapter .ornament {
+  display: inline-block;
+  margin: 0 8px;
+  color: var(--copper);
+  font-style: italic;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.chapter-sub {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink-fade);
+  margin-bottom: 44px;
+  border-bottom: 1px dashed rgba(120, 90, 60, 0.3);
+  padding-bottom: 18px;
+  max-width: 720px;
+}
+
+/* ════════════════════════════════════════
+   СЕКЦИЯ I — КАРТА ШАГОВ
+═════════════════════════════════════════ */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+/* пунктирная линия между шагами */
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 38px;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background-image: linear-gradient(90deg, var(--copper) 50%, transparent 50%);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+.step {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.step-num {
+  width: 64px; height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, var(--vellum) 0%, var(--vellum-cool) 100%);
+  border: 2px solid var(--copper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--copper-deep);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.15),
+    inset 0 -2px 4px rgba(120, 80, 30, 0.15);
+  transition: transform 0.3s;
+}
+
+.step:hover .step-num {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.step-title {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.step-desc {
+  font-size: 14px;
+  color: var(--ink-fade);
+  font-style: italic;
+  line-height: 1.55;
+  padding: 0 4px;
+}
+
+/* проза с пятнами капли */
+.prose-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+  position: relative;
+}
+
+.prose-two p {
+  font-size: 16.5px;
+  line-height: 1.8;
+  margin-bottom: 14px;
+  color: var(--ink-soft);
+}
+.prose-two p strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* выноска как «приписка на полях» */
+.margin-note {
+  border-left: 3px double var(--copper);
+  padding: 14px 20px;
+  background:
+    linear-gradient(90deg, rgba(168,90,40,0.06), transparent);
+  margin: 18px 0;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink-soft);
+  position: relative;
+}
+.margin-note::before {
+  content: '☞';
+  position: absolute;
+  left: -10px;
+  top: 12px;
+  background: var(--vellum);
+  color: var(--copper-deep);
+  font-style: normal;
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+}
+
+/* ════════════════════════════════════════
+   СЕКЦИЯ II — РЕЕСТР ПРОВИЗИИ
+═════════════════════════════════════════ */
+.ledger {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.tier {
+  background:
+    linear-gradient(180deg, var(--vellum-cool) 0%, var(--vellum) 100%);
+  border: 1px solid var(--vellum-edge);
+  padding: 0;
+  position: relative;
+  transform: rotate(-0.3deg);
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,250,230,0.5);
+}
+.tier:nth-child(2n) { transform: rotate(0.4deg); }
+.tier:nth-child(3n) { transform: rotate(-0.2deg); }
+
+/* отверстие сверху + верёвочка */
+.tier::before {
+  content: '';
+  position: absolute;
+  top: 8px; left: 50%;
+  width: 8px; height: 8px;
+  background: var(--night-2);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,0.6);
+  z-index: 2;
+}
+
+.tier-band {
+  padding: 22px 14px 10px;
+  text-align: center;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  border-bottom: 1px dashed var(--vellum-edge);
+  position: relative;
+}
+
+.tier-band .v {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--copper-deep);
+  display: block;
+  line-height: 1;
+}
+.tier-band .lbl {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--ink-fade);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.t-1  .tier-band .v { color: var(--ink-fade); }
+.t-5  .tier-band .v { color: var(--leaf-deep); }
+.t-10 .tier-band .v { color: var(--r-uncommon); }
+.t-15 .tier-band .v { color: var(--r-rare); }
+.t-20 .tier-band .v { color: var(--r-legendary); }
+
+.tier-list {
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tier-item {
+  font-size: 14px;
+  color: var(--ink-soft);
+  padding: 4px 0;
+  border-bottom: 1px dotted rgba(120, 90, 60, 0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.tier-item:last-child { border-bottom: none; }
+
+.tier-item .num {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  color: var(--copper-deep);
+  margin-left: 6px;
+}
+
+.tier-more {
+  font-style: italic;
+  color: var(--ink-ghost);
+  font-size: 13px;
+  text-align: right;
+  padding-top: 4px;
+}
+
+/* индикатор и порядок автоподбора */
+.indicator {
+  background:
+    linear-gradient(135deg, var(--vellum-warm) 0%, var(--vellum) 100%);
+  border: 1px solid var(--vellum-edge);
+  padding: 28px 30px;
+  position: relative;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.indicator h5,
+.queue h5 {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--copper-deep);
+  margin-bottom: 18px;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.indicator h5::after,
+.queue h5::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--copper), transparent);
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.bar-row:last-child { margin-bottom: 0; }
+
+.bar-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-soft);
+  min-width: 100px;
+}
+
+.bar-track {
+  flex: 1;
+  height: 10px;
+  background: var(--vellum-edge);
+  border-radius: 1px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.bar-fill {
+  height: 100%;
+  position: relative;
+}
+.bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.15) 0,
+      rgba(255,255,255,0.15) 4px,
+      transparent 4px,
+      transparent 8px
+    );
+}
+.bar-fill.lo { background: #b04830; width: 30%; }
+.bar-fill.md { background: var(--leaf); width: 65%; }
+.bar-fill.hi { background: var(--r-uncommon); width: 100%; }
+
+.bar-val {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  color: var(--ink-fade);
+  min-width: 60px;
+  text-align: right;
+}
+
+.queue {
+  background:
+    linear-gradient(135deg, var(--vellum) 0%, var(--vellum-cool) 100%);
+  border: 1px solid var(--vellum-edge);
+  padding: 28px 30px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.queue-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgba(120, 90, 60, 0.3);
+  font-size: 15px;
+}
+.queue-row:last-child { border-bottom: none; }
+
+.q-rank {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--copper);
+  text-align: center;
+  line-height: 1;
+}
+
+.q-name { color: var(--ink); font-style: italic; }
+
+.q-tag {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 1px solid;
+}
+.q-tag.own  { color: var(--copper-deep); border-color: var(--copper); background: rgba(168,90,40,0.06); }
+.q-tag.camp { color: var(--ink-fade); border-color: var(--vellum-edge); background: rgba(184,163,122,0.15); }
+
+/* ════════════════════════════════════════
+   СЕКЦИЯ III — ДЕЛИКАТЕСЫ (СУРГУЧНЫЕ ПЕЧАТИ)
+═════════════════════════════════════════ */
+.rarity-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.rarity-card {
+  background:
+    linear-gradient(180deg, var(--vellum) 0%, var(--vellum-warm) 100%);
+  border: 1px solid var(--vellum-edge);
+  padding: 60px 26px 26px;
+  position: relative;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+.rarity-card.uncommon  { transform: rotate(-0.4deg); }
+.rarity-card.rare      { transform: rotate(0.3deg); }
+.rarity-card.legendary { transform: rotate(-0.2deg); }
+
+/* сургучная печать сверху */
+.wax {
+  position: absolute;
+  top: -22px; left: 50%;
+  transform: translateX(-50%) rotate(-6deg);
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255,240,200,0.9);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.4),
+    inset -3px -3px 6px rgba(0,0,0,0.35),
+    inset 3px 3px 4px rgba(255,200,160,0.25);
+}
+/* «капельки» сургуча */
+.wax::before, .wax::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+  box-shadow: inherit;
+}
+.wax::before { width: 12px; height: 12px; bottom: -4px; left: 6px; }
+.wax::after  { width: 8px;  height: 8px;  bottom: -2px; right: 12px; }
+
+.uncommon .wax  { background: radial-gradient(circle at 35% 30%, #88b070, #5c8a3a 50%, #3a5a22 100%); }
+.rare .wax      { background: radial-gradient(circle at 35% 30%, #5a8ab8, #2a5c8a 50%, #143a5c 100%); }
+.legendary .wax { background: radial-gradient(circle at 35% 30%, #d8804a, #a85a28 50%, #6e3814 100%); }
+
+.rarity-card .glyph {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.uncommon  .glyph { color: var(--r-uncommon); }
+.rare      .glyph { color: var(--r-rare); }
+.legendary .glyph { color: var(--r-legendary); }
+
+.rarity-card h3 {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.rarity-card p.tag {
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--ink-fade);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed rgba(120,90,60,0.3);
+}
+
+.r-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.r-list-item {
+  font-size: 14px;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  line-height: 1.55;
+}
+.r-list-item::before {
+  content: '✦';
+  font-style: normal;
+  font-size: 9px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.uncommon  .r-list-item::before { color: var(--r-uncommon); }
+.rare      .r-list-item::before { color: var(--r-rare); }
+.legendary .r-list-item::before { color: var(--r-legendary); }
+
+/* категории деликатесов — полки в шкафу */
+.shelves {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--vellum-edge);
+  border: 1px solid var(--vellum-edge);
+  margin-top: 36px;
+}
+
+.shelf {
+  background: var(--vellum);
+  padding: 22px 24px;
+  position: relative;
+  transition: background 0.2s;
+  border-left: 3px solid transparent;
+}
+.shelf:hover {
+  background: var(--vellum-warm);
+}
+
+.shelf.s-init  { border-left-color: var(--leaf); }
+.shelf.s-def   { border-left-color: var(--r-rare); }
+.shelf.s-hp    { border-left-color: #a83828; }
+.shelf.s-save  { border-left-color: var(--ink-soft); }
+.shelf.s-skill { border-left-color: var(--r-uncommon); }
+.shelf.s-stat  { border-left-color: var(--r-legendary); }
+
+.shelf-tag {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  margin-bottom: 8px;
+}
+
+.shelf h4 {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--ink);
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.shelf p {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.shelf-meta {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  color: var(--ink-fade);
+  letter-spacing: 0.04em;
+  border-top: 1px dotted rgba(120,90,60,0.3);
+  padding-top: 6px;
+}
+
+/* ════════════════════════════════════════
+   СЕКЦИЯ IV — ЧАТ-ЛОГ
+═════════════════════════════════════════ */
+.chat-mock {
+  background:
+    linear-gradient(180deg, #1d1812 0%, #15110c 100%);
+  border: 1px solid rgba(168, 90, 40, 0.35);
+  padding: 22px 24px;
+  max-width: 460px;
+  font-family: 'EB Garamond', serif;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(216,128,74,0.1);
+  position: relative;
+  color: var(--vellum);
+}
+
+.chat-mock::before {
+  /* уголок-загиб как у пергамента */
+  content: '';
+  position: absolute;
+  top: -1px; right: -1px;
+  width: 22px; height: 22px;
+  background:
+    linear-gradient(225deg, var(--vellum) 0%, var(--vellum) 50%, transparent 50%);
+  box-shadow: -1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.chat-title {
+  text-align: center;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--copper-glow);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.chat-sub {
+  text-align: center;
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-ghost);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.chat-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+  margin: 14px 0;
+}
+
+.chat-portraits {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.cp-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cp-circle {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #3a2c1c, #1a1208);
+  border: 2px solid var(--copper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--copper-glow);
+  box-shadow:
+    0 0 10px rgba(216, 128, 74, 0.25),
+    inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+.cp-name {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--ink-ghost);
+}
+
+.chat-section {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--ink-ghost);
+  text-transform: uppercase;
+  margin: 10px 0 6px;
+}
+
+.chat-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 14px;
+  color: var(--vellum-warm);
+  border-bottom: 1px dotted rgba(168, 90, 40, 0.2);
+}
+.chat-line:last-child { border-bottom: none; }
+
+.chat-icon {
+  width: 18px; height: 18px;
+  border: 1px solid var(--copper);
+  background: radial-gradient(circle at 30% 30%, #4a3a26, #1a1208);
+  flex-shrink: 0;
+}
+.chat-icon.un { border-color: var(--r-uncommon); }
+.chat-icon.ra { border-color: var(--r-rare); }
+.chat-icon.le { border-color: var(--r-legendary); }
+
+.chat-effect {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(168, 90, 40, 0.3);
+}
+.chat-effect-lbl {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--copper-glow);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.chat-effect-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--r-uncommon);
+}
+.chat-effect-row .ico {
+  width: 16px; height: 16px;
+  border: 1px solid var(--r-uncommon);
+  background: rgba(92, 138, 58, 0.1);
+}
+
+/* объяснительная колонка справа */
+.explain p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.explain p strong { color: var(--ink); font-weight: 700; }
+
+/* ════════════════════════════════════════
+   СЕКЦИЯ V — НАСТРОЙКИ (ОПИСЬ)
+═════════════════════════════════════════ */
+.inventory {
+  border: 1px solid var(--vellum-edge);
+  background:
+    linear-gradient(180deg, var(--vellum) 0%, var(--vellum-warm) 100%);
+  position: relative;
+}
+
+.inv-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: 18px;
+  padding: 18px 24px;
+  border-bottom: 1px dashed var(--vellum-edge);
+  align-items: start;
+  transition: background 0.2s;
+}
+.inv-row:last-child { border-bottom: none; }
+.inv-row:hover { background: rgba(120, 70, 20, 0.04); }
+
+.inv-num {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--copper);
+  line-height: 1.1;
+  border-right: 1px dotted var(--vellum-edge);
+  padding-right: 14px;
+  text-align: center;
+}
+
+.inv-name {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--ink);
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.inv-hint {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.inv-scope {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--copper);
+  color: var(--copper-deep);
+  background: rgba(168, 90, 40, 0.06);
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════════════
+   СЕКЦИЯ VI — СОВМЕСТИМОСТЬ (ВЕРСТАК)
+═════════════════════════════════════════ */
+.specs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--vellum-edge);
+  border: 1px solid var(--vellum-edge);
+}
+.spec-cell {
+  background: var(--vellum);
+  padding: 24px 22px;
+  text-align: center;
+  position: relative;
+}
+.spec-cell:hover {
+  background: var(--vellum-warm);
+}
+
+.spec-cell::before {
+  /* мини-«гвоздик» */
+  content: '';
+  position: absolute;
+  top: 8px; left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #8a7858, #4a3a26);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2), 0 1px 1px rgba(0,0,0,0.3);
+}
+
+.spec-key {
+  font-family: 'Special Elite', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  margin: 14px 0 8px;
+}
+
+.spec-val {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+.spec-val.copper { color: var(--copper-deep); }
+.spec-val.green  { color: var(--r-uncommon); }
+.spec-val.leaf   { color: var(--leaf-deep); }
+
+.spec-note {
+  font-size: 13px;
+  color: var(--ink-fade);
+  font-style: italic;
+}
+
+/* ════════════════════════════════════════
+   ПОДВАЛ — ПОДПИСЬ ПИСАРЯ
+═════════════════════════════════════════ */
+.colophon {
+  margin: 60px auto 40px;
+  max-width: 1180px;
+  padding: 32px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed rgba(168, 90, 40, 0.25);
+  position: relative;
+  z-index: 2;
+}
+
+.colophon-name {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--vellum-warm);
+  letter-spacing: 0.04em;
+}
+.colophon-name .accent {
+  color: var(--copper-glow);
+}
+.colophon-meta {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  color: var(--ink-ghost);
+  letter-spacing: 0.08em;
+  line-height: 1.9;
+  margin-top: 6px;
+}
+
+.colophon-seal {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--wax-shine), var(--wax) 45%, var(--wax-deep) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(255, 230, 200, 0.85);
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.5),
+    inset -3px -3px 6px rgba(0,0,0,0.35),
+    inset 3px 3px 5px rgba(255,200,160,0.25);
+  transform: rotate(-8deg);
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════
+   АДАПТИВ
+═════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .titlepage-grid { grid-template-columns: 1fr; }
+  h1.tome { font-size: 56px; }
+  h1.tome .latin { font-size: 24px; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .steps::before { display: none; }
+  .ledger { grid-template-columns: repeat(2, 1fr); }
+  .rarity-row { grid-template-columns: 1fr; }
+  .shelves { grid-template-columns: 1fr; }
+  .specs { grid-template-columns: repeat(2, 1fr); }
+  .prose-two { grid-template-columns: 1fr; gap: 24px; }
+  .parchment { padding: 36px 28px; }
+  .titlepage { padding: 50px 28px 40px; }
+  .rest-stamps { grid-template-columns: 1fr; }
+  .colophon { flex-direction: column; gap: 18px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── НАВИГАЦИЯ ─── -->
+<nav class="nav">
+  <div class="nav-seal"></div>
+  <span class="nav-title">Лагерный Отдых · бортовой журнал</span>
+  <div class="nav-meta">
+    <span class="nm">Foundry VTT</span>
+    <span class="nm">D&amp;D 5e</span>
+    <span class="nm">V13</span>
+    <span class="nm hot">v 1.3.0</span>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ═══ ШАПКА — ТИТУЛЬНАЯ СТРАНИЦА ═══ -->
+  <header class="parchment titlepage paper-noise">
+    <div class="titlepage-mark">Глава первая · о пище и сне в дороге</div>
+
+    <h1 class="tome">
+      <span class="accent">Сей модуль для странствий</span>
+      Лагерный Отдых
+      <span class="latin">— Camp Rest, sive de quiete itinerantium —</span>
+    </h1>
+
+    <div class="tome-rule">
+      <span class="line"></span>
+      <span class="glyph">✦ ❦ ✦</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="titlepage-grid">
+      <div>
+        <p class="tome-lead">
+          Привал у костра в духе <strong>Baldur's Gate III</strong> — написан рукой того, кто сам ночевал у этих углей.
+          Тратьте провизию из походной сумки для короткого или долгого отдыха, готовьте <strong>деликатесы с бонусами</strong>
+          на следующий день, ведите общие лагерные запасы. Каждое блюдо — заметка в общий чат: с портретами, описью съеденного и наложенными чарами.
+        </p>
+
+        <div class="rest-stamps">
+          <div class="stamp short">
+            <div class="kind">— Короткий —</div>
+            <div class="name">Привал у костра</div>
+            <div class="cost">по умолчанию <b>10</b> припасов на душу</div>
+          </div>
+          <div class="stamp long">
+            <div class="kind">— Долгий —</div>
+            <div class="name">Ночной лагерь</div>
+            <div class="cost">по умолчанию <b>30</b> припасов на душу</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="label-card">
+        <div class="label-head">— Опись модуля —</div>
+        <div class="label-grid">
+          <div class="label-cell"><div class="lk">Версия</div><div class="lv copper">1.3.0</div></div>
+          <div class="label-cell"><div class="lk">Foundry</div><div class="lv">V XIII</div></div>
+          <div class="label-cell"><div class="lk">Совмест.</div><div class="lv green">Verified</div></div>
+          <div class="label-cell"><div class="lk">Система</div><div class="lv">D&amp;D 5e 3.0+</div></div>
+          <div class="label-cell"><div class="lk">Зависим.</div><div class="lv green">— нет —</div></div>
+          <div class="label-cell"><div class="lk">Языки</div><div class="lv leaf">RU · EN</div></div>
+        </div>
+        <div class="label-foot">
+          Деликатесы накладывают чары через Active Effects. Лог отдыха попадает в общий чат с портретами и описью съеденного.
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <!-- ═══ I · КАК ЭТО РАБОТАЕТ ═══ -->
+  <section class="parchment tilt-l paper-noise">
+    <div class="sec-mark">
+      <div class="sec-roman">I</div>
+      <span class="sec-lbl">— Глава первая —</span>
+      <span class="sec-rule-h"></span>
+    </div>
+    <h2 class="chapter">Лагерь <span class="ornament">за</span> пять шагов</h2>
+    <p class="chapter-sub">От открытия диалога до сна с наложенными чарами — ровно столько движений, сколько нужно усталому страннику.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">I</div>
+        <div class="step-title">Открыть лагерь</div>
+        <div class="step-desc">Кнопка на токене (ПКМ) или в панели сцены</div>
+      </div>
+      <div class="step">
+        <div class="step-num">II</div>
+        <div class="step-title">Выбрать тип</div>
+        <div class="step-desc">Короткий или долгий — стоимость пересчитается сразу</div>
+      </div>
+      <div class="step">
+        <div class="step-num">III</div>
+        <div class="step-title">Выбрать еду</div>
+        <div class="step-desc">ЛКМ кладёт порцию, ПКМ убирает; есть и автоподбор</div>
+      </div>
+      <div class="step">
+        <div class="step-num">IV</div>
+        <div class="step-title">Отдохнуть</div>
+        <div class="step-desc">Припасы списаны, ОЗ восстановлены, чары наложены</div>
+      </div>
+      <div class="step">
+        <div class="step-num">V</div>
+        <div class="step-title">Запись в журнал</div>
+        <div class="step-desc">В общий чат уходит красивая заметка с портретами</div>
+      </div>
+    </div>
+
+    <div class="prose-two">
+      <div>
+        <p>Модуль сам узнаёт, чьим персонажем играет игрок. <strong>ГМ видит всех героев партии разом</strong> — это удобно, когда вся группа укладывается у одного костра одним щелчком.</p>
+        <div class="margin-note">
+          Провизия берётся и из инвентаря персонажа, и из <em>актера-лагеря</em> — обе сумы объединены в едином окне.
+        </div>
+      </div>
+      <div>
+        <p>Полоса припасов меняет цвет: <strong>красный</strong> — голодно, <strong>оранжевый</strong> — почти, <strong>зелёный</strong> — довольно. Кнопка «Отдохнуть» молчит, пока полоса не зелёная.</p>
+        <p>Каждый персонаж в окне — кликабелен: можно отметить, что конкретный герой <strong>сегодня не ест</strong>. Эта пометка сохраняется в его флагах.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ II · ПРОВИЗИЯ ═══ -->
+  <section class="parchment tilt-r paper-noise">
+    <div class="sec-mark">
+      <div class="sec-roman">II</div>
+      <span class="sec-lbl">— Глава вторая —</span>
+      <span class="sec-rule-h"></span>
+    </div>
+    <h2 class="chapter">Реестр <span class="ornament">·</span> восьмидесяти + яств </h2>
+    <p class="chapter-sub">Совместимый с <em>Laaru</em> перечень — от огрызка яблока до пира во славу дракона.</p>
+
+    <div class="ledger">
+      <div class="tier t-1">
+        <div class="tier-band"><span class="v">1–4</span><span class="lbl">припаса</span></div>
+        <div class="tier-list">
+          <div class="tier-item">Апельсин <span class="num">3</span></div>
+          <div class="tier-item">Куриное яйцо <span class="num">2</span></div>
+          <div class="tier-item">Морковь <span class="num">2</span></div>
+          <div class="tier-item">Сочная груша <span class="num">3</span></div>
+          <div class="tier-item">Ягоды <span class="num">3</span></div>
+          <div class="tier-more">+ 15 прочих</div>
+        </div>
+      </div>
+      <div class="tier t-5">
+        <div class="tier-band"><span class="v">5–9</span><span class="lbl">припасов</span></div>
+        <div class="tier-list">
+          <div class="tier-item">Багет <span class="num">5</span></div>
+          <div class="tier-item">Грибной суп <span class="num">6</span></div>
+          <div class="tier-item">Жареная нога <span class="num">8</span></div>
+          <div class="tier-item">Козлятина <span class="num">7</span></div>
+          <div class="tier-item">Целая курица <span class="num">9</span></div>
+          <div class="tier-more">+ 30 прочих</div>
+        </div>
+      </div>
+      <div class="tier t-10">
+        <div class="tier-band"><span class="v">10–14</span><span class="lbl">припасов</span></div>
+        <div class="tier-list">
+          <div class="tier-item">Солнцедыня <span class="num">10</span></div>
+          <div class="tier-item">Окорок в меду <span class="num">12</span></div>
+          <div class="tier-item">Свиная лопатка <span class="num">12</span></div>
+          <div class="tier-item">Космич. хомяк <span class="num">13</span></div>
+          <div class="tier-item">Чёрный пудинг <span class="num">12</span></div>
+        </div>
+      </div>
+      <div class="tier t-15">
+        <div class="tier-band"><span class="v">15–19</span><span class="lbl">припасов</span></div>
+        <div class="tier-list">
+          <div class="tier-item">Пицца <span class="num">15</span></div>
+          <div class="tier-item">Жареная индейка <span class="num">16</span></div>
+          <div class="tier-item">Солнечная паэлья <span class="num">18</span></div>
+          <div class="tier-item">Сытный обед <span class="num">17</span></div>
+        </div>
+      </div>
+      <div class="tier t-20">
+        <div class="tier-band"><span class="v">20+</span><span class="lbl">припасов</span></div>
+        <div class="tier-list">
+          <div class="tier-item">Говяжье жаркое <span class="num">20</span></div>
+          <div class="tier-item">Пирог с лососем <span class="num">20</span></div>
+          <div class="tier-item">Сума с припас. <span class="num">20</span></div>
+          <div class="tier-item">Тяжёлая сума <span class="num">25</span></div>
+          <div class="tier-item">Яйцо медвесыча <span class="num">20</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose-two" style="margin-top:14px;">
+      <div class="indicator">
+        <h5>Полоса припасов</h5>
+        <div class="bar-row">
+          <span class="bar-label">— мало —</span>
+          <div class="bar-track"><div class="bar-fill lo"></div></div>
+          <span class="bar-val">9 / 30</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">— почти —</span>
+          <div class="bar-track"><div class="bar-fill md"></div></div>
+          <span class="bar-val">19 / 30</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">— довольно —</span>
+          <div class="bar-track"><div class="bar-fill hi"></div></div>
+          <span class="bar-val">30 / 30</span>
+        </div>
+      </div>
+      <div class="queue">
+        <h5>Порядок автоподбора</h5>
+        <div class="queue-row">
+          <span class="q-rank">i</span>
+          <span class="q-name">Деликатесы из инвентаря</span>
+          <span class="q-tag own">личное</span>
+        </div>
+        <div class="queue-row">
+          <span class="q-rank">ii</span>
+          <span class="q-name">Обычная еда из инвентаря</span>
+          <span class="q-tag own">личное</span>
+        </div>
+        <div class="queue-row">
+          <span class="q-rank">iii</span>
+          <span class="q-name">Деликатесы из лагеря</span>
+          <span class="q-tag camp">общее</span>
+        </div>
+        <div class="queue-row">
+          <span class="q-rank">iv</span>
+          <span class="q-name">Обычная еда из лагеря</span>
+          <span class="q-tag camp">общее</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ III · ДЕЛИКАТЕСЫ ═══ -->
+  <section class="parchment tilt-l paper-noise">
+    <div class="sec-mark">
+      <div class="sec-roman">III</div>
+      <span class="sec-lbl">— Глава третья —</span>
+      <span class="sec-rule-h"></span>
+    </div>
+    <h2 class="chapter">Тридцать <span class="ornament">·</span> особых блюд с чарами</h2>
+    <p class="chapter-sub">Active Effects на двадцать четыре часа — налагаются сами при удачном привале и тают перед следующим.</p>
+
+    <div class="rarity-row">
+      <article class="rarity-card uncommon">
+        <div class="wax">U</div>
+        <div class="glyph">— Необычный —</div>
+        <h3>Uncommon</h3>
+        <p class="tag">Скромная подмога: к броску инициативы, к спасброскам, к одному-двум навыкам. В большинстве таверн найдутся.</p>
+        <div class="r-list">
+          <div class="r-list-item">Острый суп бехолдера — +1d4 к инициативе</div>
+          <div class="r-list-item">Мёд ведьмаков — +1d4 к проверкам Мудрости</div>
+          <div class="r-list-item">Кулак орка — +1d4 к проверкам Силы</div>
+          <div class="r-list-item">Суп из черепашьего панциря — +1 к КД</div>
+        </div>
+      </article>
+
+      <article class="rarity-card rare">
+        <div class="wax">R</div>
+        <div class="glyph">— Редкий —</div>
+        <h3>Rare</h3>
+        <p class="tag">Уже не подмога — благословение: временные ОЗ, бонусы к спасброскам характеристик, поддержка концентрации.</p>
+        <div class="r-list">
+          <div class="r-list-item">Пирог феникса — +10 временных ОЗ</div>
+          <div class="r-list-item">Зелье-суп концентрации — +1d4 к концентрации</div>
+          <div class="r-list-item">Суп из мозгов иллитида — +1d4 к Интеллекту</div>
+          <div class="r-list-item">Ветер эльфийских лесов — +15 футов скорости</div>
+        </div>
+      </article>
+
+      <article class="rarity-card legendary">
+        <div class="wax">L</div>
+        <div class="glyph">— Легендарный —</div>
+        <h3>Legendary</h3>
+        <p class="tag">Сочетание нескольких мощных чар; уникальные артефактные эффекты, что варятся раз в долгую луну.</p>
+        <div class="r-list">
+          <div class="r-list-item">Суп феникса и дракона — +15 временных ОЗ, преим. на спасы от смерти</div>
+          <div class="r-list-item">Амброзия небесного двора — +2 ко всем спасброскам</div>
+          <div class="r-list-item">Пир дракона — +2 КД, +10 временных ОЗ</div>
+          <div class="r-list-item">Ужин богов — +1d4 инициативы, +1 КД, +2 ко всем хар.</div>
+        </div>
+      </article>
+    </div>
+
+    <div class="shelves">
+      <div class="shelf s-init">
+        <div class="shelf-tag">— Инициатива и скорость —</div>
+        <h4>Быстрота действий</h4>
+        <p>Блюда ускоряют реакцию и движение. Бонусы к инициативе наложены через Active Effect, к скорости — в футах.</p>
+        <div class="shelf-meta">5 блюд · от +1 до +15 футов · от +1 до +1d4 инициативы</div>
+      </div>
+      <div class="shelf s-def">
+        <div class="shelf-tag">— Защита —</div>
+        <h4>Крепость тела</h4>
+        <p>Укрепляют КД и спасбросок Телосложения. От черепашьего супа до панцирного паштета голема.</p>
+        <div class="shelf-meta">4 блюда · +1 КД · +2 к спасу</div>
+      </div>
+      <div class="shelf s-hp">
+        <div class="shelf-tag">— Временные ОЗ —</div>
+        <h4>Жизненная сила</h4>
+        <p>Дают временные очки здоровья поверх максимума. Не складываются — берётся наибольшее.</p>
+        <div class="shelf-meta">3 блюда · +5, +10, +15 временных ОЗ</div>
+      </div>
+      <div class="shelf s-save">
+        <div class="shelf-tag">— Спасброски —</div>
+        <h4>Стойкость духа</h4>
+        <p>Отдельные бонусы к шести видам спасбросков по характеристикам — от ядов до магии.</p>
+        <div class="shelf-meta">5 блюд · Сил, Лов, Тел, Муд — каждое отдельно</div>
+      </div>
+      <div class="shelf s-skill">
+        <div class="shelf-tag">— Навыки —</div>
+        <h4>Мастерство</h4>
+        <p>Заострённые чувства, ловкость пальцев, красноречие. +1d4 к проверкам конкретных навыков.</p>
+        <div class="shelf-meta">7 блюд · Восприятие · Скрытность · История · Убеждение…</div>
+      </div>
+      <div class="shelf s-stat">
+        <div class="shelf-tag">— Характеристики —</div>
+        <h4>Тотальное превосходство</h4>
+        <p>Праздничный пирог полурослика даёт +1d4 ко всем навыкам. Ужин богов усиливает всё разом.</p>
+        <div class="shelf-meta">4 блюда · в т. ч. 2 легендарных</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ IV · ЧАТ-ЛОГ ═══ -->
+  <section class="parchment tilt-r paper-noise">
+    <div class="sec-mark">
+      <div class="sec-roman">IV</div>
+      <span class="sec-lbl">— Глава четвёртая —</span>
+      <span class="sec-rule-h"></span>
+    </div>
+    <h2 class="chapter">Заметка <span class="ornament">·</span> в общий чат</h2>
+    <p class="chapter-sub">Конец отдыха — сам собой записывается в журнал партии: с портретами, описью съеденного и активными чарами.</p>
+
+    <div class="prose-two">
+      <div>
+        <div class="chat-mock">
+          <div class="chat-title">— Долгий отдых —</div>
+          <div class="chat-sub">Лагерный отдых завершён</div>
+          <div class="chat-rule"></div>
+
+          <div class="chat-portraits">
+            <div class="cp-one"><div class="cp-circle">Э</div><div class="cp-name">Эйлин</div></div>
+            <div class="cp-one"><div class="cp-circle">Г</div><div class="cp-name">Горрим</div></div>
+            <div class="cp-one"><div class="cp-circle">К</div><div class="cp-name">Кэйли</div></div>
+          </div>
+
+          <div class="chat-section">— съедено —</div>
+          <div class="chat-line"><span class="chat-icon"></span>Жареная индейка ×2</div>
+          <div class="chat-line"><span class="chat-icon un"></span>Острый суп бехолдера</div>
+          <div class="chat-line" style="font-family:'Special Elite',monospace; font-size:11px; color:var(--ink-ghost);">Потрачено припасов: 90</div>
+
+          <div class="chat-effect">
+            <div class="chat-effect-lbl">— активные бонусы —</div>
+            <div class="chat-effect-row"><span class="ico"></span>+1d4 к инициативе</div>
+          </div>
+        </div>
+        <p style="font-family:'EB Garamond',serif; font-style:italic; font-size:14px; color:var(--ink-fade); margin-top:14px; text-align:center;">— отправляется в общий чат —</p>
+      </div>
+
+      <div class="explain">
+        <p>Сообщение собирается само из данных отдыха: <strong>портреты персонажей</strong> в круглых рамках, опись съеденных блюд с иконками, израсходованные припасы.</p>
+        <p>Если на стол подавали деликатесы — внизу появится колонка <strong>«Активные бонусы»</strong>, и в ней — иконка и краткое описание каждой чары.</p>
+        <div class="margin-note">
+          Деликатесы разных редкостей подсвечиваются особо: зелёный для необычных, синий для редких, медный для легендарных.
+        </div>
+        <p>Active Effects накладываются перед отправкой заметки и держатся <strong>сутки</strong> (86 400 секунд). При следующем привале старые чары <strong>заменяются новыми</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ V · НАСТРОЙКИ ═══ -->
+  <section class="parchment tilt-l paper-noise">
+    <div class="sec-mark">
+      <div class="sec-roman">V</div>
+      <span class="sec-lbl">— Глава пятая —</span>
+      <span class="sec-rule-h"></span>
+    </div>
+    <h2 class="chapter">Опись <span class="ornament">·</span> настроек модуля</h2>
+    <p class="chapter-sub">Настройки → Параметры модуля → Лагерный Отдых.</p>
+
+    <div class="inventory">
+      <div class="inv-row">
+        <div class="inv-num">i</div>
+        <div>
+          <div class="inv-name">Название актера лагеря</div>
+          <div class="inv-hint">Имя группового актера (тип: Группа), в коем хранится общая провизия. По умолчанию «Лагерь». Регистр важен.</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+      <div class="inv-row">
+        <div class="inv-num">ii</div>
+        <div>
+          <div class="inv-name">Стоимость короткого отдыха</div>
+          <div class="inv-hint">Сколько припасов уходит на одного при коротком привале. По умолчанию 10. Меняется без перезагрузки.</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+      <div class="inv-row">
+        <div class="inv-num">iii</div>
+        <div>
+          <div class="inv-name">Стоимость долгого отдыха</div>
+          <div class="inv-hint">Сколько припасов уходит на одного при долгом сне. По умолчанию 30.</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+      <div class="inv-row">
+        <div class="inv-num">iv</div>
+        <div>
+          <div class="inv-name">Использовать припасы из лагеря</div>
+          <div class="inv-hint">Дозволять брать провизию из актора-лагеря. Если выключено — берётся только из инвентарей.</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+      <div class="inv-row">
+        <div class="inv-num">v</div>
+        <div>
+          <div class="inv-name">Кнопка на токене (Token HUD)</div>
+          <div class="inv-hint">Добавляет кнопку костра в контекстное меню токена (ПКМ).</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+      <div class="inv-row">
+        <div class="inv-num">vi</div>
+        <div>
+          <div class="inv-name">Кнопка в панели сцены</div>
+          <div class="inv-hint">Добавляет «Лагерный отдых» в левую панель — в группу управления токенами.</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+      <div class="inv-row">
+        <div class="inv-num">vii</div>
+        <div>
+          <div class="inv-name">ГМ: показывать всех персонажей</div>
+          <div class="inv-hint">При открытии диалога ГМом — отображать всех персонажей игроков, а не только выбранный токен.</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+      <div class="inv-row">
+        <div class="inv-num">viii</div>
+        <div>
+          <div class="inv-name">Пересоздать компендиум деликатесов</div>
+          <div class="inv-hint">Кнопка в настройках. Удаляет и заново создаёт компендиум «Деликатесы лагеря» со всеми тридцатью особыми блюдами.</div>
+        </div>
+        <span class="inv-scope">world</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VI · СОВМЕСТИМОСТЬ ═══ -->
+  <section class="parchment tilt-r paper-noise">
+    <div class="sec-mark">
+      <div class="sec-roman">VI</div>
+      <span class="sec-lbl">— Глава шестая —</span>
+      <span class="sec-rule-h"></span>
+    </div>
+    <h2 class="chapter">Технический <span class="ornament">·</span> верстак</h2>
+    <p class="chapter-sub">Нативный API Foundry, без сторонних зависимостей.</p>
+
+    <div class="specs">
+      <div class="spec-cell">
+        <div class="spec-key">Foundry VTT</div>
+        <div class="spec-val copper">V XIII</div>
+        <div class="spec-note">Minimum + Verified V13</div>
+      </div>
+      <div class="spec-cell">
+        <div class="spec-key">Игровая система</div>
+        <div class="spec-val">D&amp;D 5e</div>
+        <div class="spec-note">версия 3.0.0 и выше</div>
+      </div>
+      <div class="spec-cell">
+        <div class="spec-key">Зависимости</div>
+        <div class="spec-val green">— нет —</div>
+        <div class="spec-note">Нативный API Foundry</div>
+      </div>
+      <div class="spec-cell">
+        <div class="spec-key">Active Effects</div>
+        <div class="spec-val leaf">24 часа</div>
+        <div class="spec-note">авто-удаление при следующем отдыхе</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ─── ПОДВАЛ — ПОДПИСЬ ПИСАРЯ ─── -->
+<footer class="colophon">
+  <div>
+    <div class="colophon-name"><span class="accent">Лагерный Отдых</span> · Camp Rest</div>
+    <div class="colophon-meta">
+      v1.3.0 · Foundry VTT V13 · D&amp;D 5e 3.0+<br>
+      No dependencies · RU / EN · 80+ foods · 30 delicacies
+    </div>
+  </div>
+  <div class="colophon-seal">CR</div>
+</footer>
+
+</body>
+</html>
